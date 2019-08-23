@@ -61,4 +61,4 @@ typings/
 .next
 
 #sqlite database file
-*.db3
+data/*.db3
