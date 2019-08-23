@@ -22,8 +22,8 @@ const errors = { // Dynamic error messaging based on sqlite codes
 routes.get('/users', async (req, res) => {
     try {
         const allUsers = await db('users');
-        if(allUsers.length === 0) {
-            return res.status(200).json({message:"No users found"});
+        if(!allUsers.length) {
+            return res.status(200).json({ message:"No users found" });
         }
         res.status(200).json(allUsers);
     } 

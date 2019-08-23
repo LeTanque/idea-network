@@ -15,6 +15,6 @@ server.use('/v1', router);
 
 const port = process.env.PORT || 3338;
 server.listen(port, function() {
-  console.log(`\n=== HELLO! http://localhost:${port} ===\n`);
+  console.log(`\n=== HELLO! Running on port ${port} ===\n`);
 });
 
