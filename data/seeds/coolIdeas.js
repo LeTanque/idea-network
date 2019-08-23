@@ -1,11 +1,13 @@
 
 exports.seed = function(knex) {
-  return knex('ideas').del()
+  return knex('users').del()
     .then(function () {
-      return knex('ideas').insert([
+      return knex('users').insert([
         {
-          id: 1, 
-          colName: 'rowValue1'
+          name: 'Tacos'
+        },
+        {
+          name: 'Vincent'
         }
       ]);
     });
