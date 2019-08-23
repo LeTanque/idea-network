@@ -23,7 +23,7 @@ module.exports = {
   },
   production: {
     client: 'pg',
-    connection: productionDbConnection, 
+    connection: productionDbConnection,
     migrations: {
       directory: './data/migrations',
       tableName: 'knex_migrations',
@@ -34,3 +34,5 @@ module.exports = {
     useNullAsDefault: true
   },
 };
+
+
