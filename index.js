@@ -14,7 +14,7 @@ server.use('/api', router);
 
 
 
-const port = 3338;
+const port = process.env.PORT || 3338;
 server.listen(port, function() {
   console.log(`\n=== HELLO! http://localhost:${port} ===\n`);
 });
