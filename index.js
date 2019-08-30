@@ -9,7 +9,15 @@ server.use(express.json());
 server.use(helmet());
 
 
-// endpoints here
+server.get('/', (req, res) => {
+  console.log(req);
+  res.send(`
+    <h1><code>Welcome to the idea network server</code></h1>
+  `);
+});
+
+
+// ENDPOINTS 👇
 server.use('/v1', router);
 
 
