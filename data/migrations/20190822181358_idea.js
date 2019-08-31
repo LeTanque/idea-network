@@ -2,18 +2,24 @@ exports.up = function(knex) {
 
   return knex.schema
     .createTable('users', function(users) {
-      users.increments();
+      users
+        .increments();
+
       users
         .string('name')
         .notNullable()
         .unique();
     })
     .createTable('ideas', function(ideas) {
-      ideas.increments();
-      ideas.text('text').notNullable();
+      ideas
+        .increments();
 
       ideas
-        .integer('idea_id')
+        .text('text')
+        .notNullable();
+
+      ideas
+        .integer('user_id')
         .unsigned()
         .notNullable()
         .references('id')

@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const helmet = require("helmet");
 const router = require("./routes/routes.js");
 
@@ -29,5 +29,7 @@ server.use('/v1', router);
 // SERVER HELLO 👇
 const port = process.env.PORT || 3338;
 server.listen(port, function() {
-  console.log(`\n=== HELLO! Running on port ${port} ===\n`);
+  console.log(`\n---==[]==---   My favorite number is... ${port}!   ---==[]==---\n`);
 });
+
+
