@@ -1,4 +1,4 @@
-const productionDbConnection = process.env.DATABASE_URL || process.env.NODE_PG_DB;
+const productionDbConnection = process.env.DATABASE_URL;
 
 
 module.exports = {

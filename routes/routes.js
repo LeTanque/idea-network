@@ -1,24 +1,22 @@
-// import express from 'express';
-const express = require('express');
-// import db from './data/dbConfig.js';
-const db = require('../data/dbConfig.js');
+import express from 'express';
+import db from '../data/dbConfig.js';
 
-
-// const environment = process.env.NODE_DB_ENV || 'development';
-
+// USE EXPRESS ROUTER WITH JSON
 const routes = express.Router();
-routes.use(express.json());
 
 
-const errors = { // Dynamic error messaging based on sqlite codes
+
+// DYNAMIC ERROR OBJECT
+const errorObject = { // Dynamic error messaging based on sqlite codes
     '1': 'We ran into an error.',
     '4': 'Operation aborted',
     '9': 'Operation aborted',
-    '19': 'Another card with that value exists, yo!'
+    '19': 'Another element with that value exists, yo!'
 };
+const backupError='We ran into an error, yo! Crazy!'
 
 
-// Get all stored cards
+// GET ALL DA USERS
 routes.get('/users', async (req, res) => {
     try {
         const allUsers = await db('users');
@@ -28,55 +26,111 @@ routes.get('/users', async (req, res) => {
         res.status(200).json(allUsers);
     } 
     catch (error) {
-        res.status(500).json({ message: "users could not be retrieved.", error:error });
+        const message = errorObject[error.errno] || backupError;
+        res.status(500).json({ message: "Error retrieving users.", error:message });
     }
 });
 
 
-// // POST card to database
-// // Requires id
-// routes.post('/ideas', async (req, res) => {
-//     if (!req.body.id) { return res.status(400).json({ message:"Please include an id" })}
-//     try {
-//         const lookForExistingCard = await db('cards')
-//         .where({ id:req.body.id })
-//         .first();
-//         if(lookForExistingCard) {
-//             return res.status(400).json({ message:"Card with ID already exists" })
-//         }
+// POST DA USER
+routes.post('/users', async (req, res) => {
 
-//         const card = await db('cards')
-//         .returning(['name', 'id'])
-//         .insert(req.body);
-//         return res.status(200).json({message:"Card inserted!", card:card});    
-//     } catch (error) {
-//         const message = errors[error.errno] || "We ran into an error";
-//         res.status(500).json({ message:message, error:error });
-//     }
-// });
+    // MUST INCLUDE A NAME
+    if (!req.body.name) { 
+        return res.status(400).json({ message:"Please include a name" })
+    }
 
+    try {
+        const lookForExistingUsername = await db('users')
+        .where({ name:req.body.name })
+        .first();
 
-// // DESTROY card in database
-// // Requires multiverse id
-// routes.delete('/ideas/:id', async (req, res) => {
-//     try {
-//         const card = await db('cards')
-//         .where({ id: req.params.id })
-//         .first();
+        if(lookForExistingUsername) {
+            return res.status(400).json({ message:"User with name already exists" })
+        }
 
-//         const count = await db('cards')
-//             .where({ id: req.params.id })
-//             .del();
-//         if (count > 0) {
-//             res.status(200).json({message:"deleted", card:card }).end();
-//         } else {
-//             res.status(404).json({ message:"Card not found" });
-//         }
-//     } catch (error) {
-//         const message = errors[error.errno] || "We ran into an error";
-//         res.status(500).json({ message });
-//     }
-// });
+        const userId = await db('users')
+        .returning(['name'])
+        .insert(req.body);
+
+        return res.status(200).json({ message: `User ${req.body.name} inserted!`, id: userId[0]});
+    }
+
+    catch (error) {
+        const message = errorObject[error.errno] || backupError;
+        res.status(500).json({ message: "Error adding user.", error:message });
+    }
+});
 
 
-module.exports = routes;
+// DESTROY USER BY ID
+routes.delete('/users/:id', async (req, res) => {
+    if(!req.params.id) {
+        return res.status(400).json({ message: "Please provide the id of the user that you would like to remove." });
+    }
+
+    try {
+        const userObject = await db('users')
+            .where({ id: req.params.id })
+            .first();
+
+        const count = await db('users')
+            .where({ id: req.params.id })
+            .del();
+
+        if (count > 0) {
+            res.status(200).json({ 
+                message: "User removed.", 
+                name:userObject.name,
+                id:userObject.id
+            }).end();
+        } else {
+            res.status(404).json({ message: "User not found." });
+        }
+    }
+
+    catch (error) {
+        const message = errorObject[error.errno] || backupError;
+        res.status(500).json({ message: "Error removing user.", error:message });
+    }
+});
+
+
+
+// DESTROY USER BY NAME
+routes.delete('/users', async (req, res) => {
+    if(!req.body.name) {
+        return res.status(400).json({ message: "Please provide the name of the user that you would like to remove." });
+    }
+    
+    const userObject = await db('users')
+        .where({ name: req.body.name })
+        .first();
+        
+    if(!userObject) {
+        return res.status(404).json({ message: `User ${req.body.name} not found.` });
+    }
+
+    try {
+        await db('users')
+            .where({ name: req.body.name })
+            .del();
+
+        res.status(200).json({ 
+            message: "User removed.", 
+            name:userObject.name,
+            id:userObject.id
+        }).end();
+    }
+
+    catch (error) {
+        const message = errorObject[error.errno] || backupError;
+        res.status(500).json({ message: "Error removing user.", error:message });
+    }
+});
+
+
+
+export default routes;
+
+

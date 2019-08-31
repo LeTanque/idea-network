@@ -1,18 +1,21 @@
-const express = require('express');
-const helmet = require('helmet');
+import express from 'express';
+import helmet from 'helmet';
+import router from './routes/routes.js';
 
 const server = express();
-const router = require('./routes/routes.js');
-
 
 server.use(express.json());
 server.use(helmet());
 
 
-server.get('/', (req, res) => {
-  console.log(req);
+// ROOT RESPONSE - ALL METHODS 👇
+server.all('/', (req, res) => {
+  console.log("Request method:  ",req.method);
   res.send(`
-    <h1><code>Welcome to the idea network server</code></h1>
+    <code>  
+      <h1>Welcome to the idea network server</h1>
+      <h3>${req.method} request recieved</h3>
+    </code>
   `);
 });
 
@@ -21,6 +24,7 @@ server.get('/', (req, res) => {
 server.use('/v1', router);
 
 
+// SERVER HELLO 👇
 const port = process.env.PORT || 3338;
 server.listen(port, function() {
   console.log(`\n=== HELLO! Running on port ${port} ===\n`);
