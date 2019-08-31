@@ -1,6 +1,6 @@
 const express = require('express');
 
-// USE EXPRESS ROUTER WITH JSON - NEEDED FOR PUT/DELETE/ETC
+
 const routes = express.Router();
 
 

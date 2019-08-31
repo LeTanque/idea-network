@@ -2,10 +2,11 @@ const express = require("express");
 const helmet = require("helmet");
 const router = require("./routes/routes.js");
 
+// USE EXPRESS ROUTER WITH JSON - NEEDED FOR PUT/DELETE/ETC
 const server = express();
-
 server.use(helmet());
 server.use(express.json());
+
 
 
 // ROOT RESPONSE - ALL METHODS 👇
