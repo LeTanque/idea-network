@@ -2,10 +2,12 @@ import express from 'express';
 import helmet from 'helmet';
 import router from './routes/routes.js';
 
+
+
 const server = express();
 
-server.use(express.json());
 server.use(helmet());
+server.use(express.json());
 
 
 // ROOT RESPONSE - ALL METHODS 👇
@@ -30,3 +32,6 @@ server.listen(port, function() {
   console.log(`\n=== HELLO! Running on port ${port} ===\n`);
 });
 
+
+
+// export default server;

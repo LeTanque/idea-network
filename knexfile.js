@@ -2,7 +2,7 @@ const productionDbConnection = process.env.DATABASE_URL;
 
 
 module.exports = {
-  development: {
+  hotdev: {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
