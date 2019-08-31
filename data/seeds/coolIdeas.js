@@ -1,7 +1,8 @@
 
 exports.seed = function(knex) {
   return knex('users').insert([
-    { name: 'Tacos' },
-    { name: 'Vincent' }
+    { id:1, name: 'Tacos' },
+    { id:2, name: 'Vincent' }
   ]);
 };
+
