@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r esm index.js",
-    "server": "nodemon -r esm index.js",
-    "heroku-postbuild": "npm install --production && knex migrate:latest && knex seed:run"
+    "start": "node -r dotenv/config -r esm index.js",
+    "server": "nodemon -r dotenv/config -r esm index.js",
+    "heroku-postbuild": "npm install --production && knex migrate:latest"
   },
   "engines": {
     "node": "10.15.3",

@@ -1,27 +1,16 @@
-import knex from 'knex';
-import knexConfig from '../knexfile.js';
-require('dotenv').config();
+
+const knex = require("knex");
+
+const dbEnvironment = process.env.NODE_ENV || 'hotdev';
 
 
-let dbEnv = "";
-if (process.env.DB_ENVIRO) {
-    dbEnv = process.env.DB_ENVIRO
-} 
-if (process.env.DB_ENV) {
-    dbEnv = process.env.DB_ENV
-} 
-if (!process.env.DB_ENV && !process.env.DB_ENVIRO) {
-    dbEnv = "hotdev"
-}
-
-
-
-export default  knex(knexConfig[dbEnv]);
+let knexfileConfig = require('../knexfile')[dbEnvironment];
 
 
 
 
-// console.log("dbConfig knexConfig: ", knexConfig[dbEnv]);
-// console.log("DB_ENV, DB_ENVIRO: ", process.env.DB_ENV, process.env.DB_ENVIRO);
-// process.env.DB_ENVIRO || process.env.DB_ENV || "hotdev";
-// module.exports = knex(knexConfig[dbEnv]) ;
+// console.log("NODE_ENV value:  ", process.env.NODE_ENV)
+// console.log("SQLITE FILE:  ---> ", process.env.DB_FILE);
+
+module.exports = require('knex')(knexfileConfig);
+

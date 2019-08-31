@@ -1,7 +1,8 @@
-import express from 'express';
-import db from '../data/dbConfig.js';
+const express = require('express');
+const db = require("../data/dbConfig.js");
 
-// USE EXPRESS ROUTER WITH JSON
+
+// USE EXPRESS ROUTER WITH JSON - NEEDED FOR PUT/DELETE/ETC
 const routes = express.Router();
 
 
@@ -41,11 +42,12 @@ routes.post('/users', async (req, res) => {
     }
 
     try {
-        const lookForExistingUsername = await db('users')
-        .where({ name:req.body.name })
+        // NAME MUST BE UNIQUE CASE INSENSITIVE
+        const existingUserWithName = await db('users')
+        .whereRaw('LOWER(name) LIKE ?', '%'+req.body.name.toLowerCase()+'%')
         .first();
 
-        if(lookForExistingUsername) {
+        if(existingUserWithName) {
             return res.status(400).json({ message:"User with name already exists" })
         }
 
@@ -53,7 +55,7 @@ routes.post('/users', async (req, res) => {
         // .returning(['name', 'id'])
         .insert(req.body, ['name', 'id']);
 
-        return res.status(200).json({ message: `User ${req.body.name} inserted!`, user: userId });
+        res.status(200).json({ message: `User ${req.body.name} inserted!`, user: userId });
     }
 
     catch (error) {
@@ -131,6 +133,7 @@ routes.delete('/users', async (req, res) => {
 
 
 
-export default routes;
+
+module.exports = routes;
 
 
