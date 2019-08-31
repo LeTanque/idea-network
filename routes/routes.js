@@ -50,10 +50,10 @@ routes.post('/users', async (req, res) => {
         }
 
         const userId = await db('users')
-        .returning(['name', 'id'])
-        .insert(req.body);
+        // .returning(['name', 'id'])
+        .insert(req.body, ['name', 'id']);
 
-        return res.status(200).json({ message: `User ${req.body.name} inserted!`, id: userId[0]});
+        return res.status(200).json({ message: `User ${req.body.name} inserted!`, user: userId });
     }
 
     catch (error) {
