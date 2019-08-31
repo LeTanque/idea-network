@@ -10,7 +10,7 @@ if (process.env.DB_ENVIRO) {
 if (process.env.DB_ENV) {
     dbEnv = process.env.DB_ENV
 } 
-if (!process.env.DB_ENV || !process.env.DB_ENVIRO) {
+if (!process.env.DB_ENV && !process.env.DB_ENVIRO) {
     dbEnv = "hotdev"
 }
 
