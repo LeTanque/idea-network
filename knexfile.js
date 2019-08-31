@@ -1,4 +1,4 @@
-const productionDbConnection = process.env.DATABASE_URL;
+const productionDbConnection = process.env.DATABASE_URL || "localhost";
 
 
 module.exports = {
